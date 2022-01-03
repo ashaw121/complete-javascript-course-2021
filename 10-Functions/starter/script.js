@@ -1,5 +1,92 @@
 'use strict';
 
+// Coding Challenge #2
+
+(function () {
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+  document.querySelector('body').addEventListener('click', function () {
+    header.style.color = 'blue';
+  });
+})();
+
+/*
+// More closure examples
+let f;
+
+const g = function () {
+  const a = 24;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+g();
+f();
+console.dir(f);
+// Re-assigning f function
+h();
+f();
+// console.log(b); // Does not work
+console.dir(f);
+
+const boardPassengers = function (n, wait) {
+  const perGroup = n / 3;
+
+  setTimeout(function () {
+    console.log(`We are now boarding all ${n} passengers.`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers`);
+  }, wait * 1000);
+
+  console.log(`Will start boarding in ${wait} seconds.`);
+};
+
+const perGroup = 1000; // Closure in function takes priority in this instance
+boardPassengers(180, 3);
+
+/*
+// Immediately Invoked Function Expressions IIFE -------
+(function () {
+  console.log('This will run once');
+  const isPrivate = 23;
+})(); // wrap in () and end with () to run it once and not again
+
+// console.log(isPrivate); // Does not work
+
+(() => console.log('This will run once'))(); // Same thing for arrow functions
+
+{
+  const isPrivate = 23;
+  var notPrivate = 25;
+}
+// console.log(isPrivate); // Does not work
+console.log(notPrivate); // Does work, but we don't like var variables
+
+// Closures -------
+const secureBooking = function () {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers`);
+  };
+};
+
+const booker = secureBooking();
+
+booker();
+booker();
+booker(); // booker function can still access passengerCount
+
+console.dir(booker); // Look at scopes to see where the closure is coming from
+
 /*
 // Coding Challenge #1
 const poll = {
