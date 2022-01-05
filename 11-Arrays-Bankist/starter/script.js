@@ -61,19 +61,187 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = '';
+
+  movements.forEach(function (mov, i) {
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+
+    const html = `
+    <div class="movements__row">
+      <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+      <div class="movements__value">${mov}</div>
+    </div>
+    `;
+
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `€${balance}`;
+};
+
+createUsernames(accounts);
+displayMovements(account1.movements);
+calcPrintBalance(account1.movements);
+
+// Coding Challenge #2
+const calcAverageHumanAge = function (dogAges) {
+  const humanAges = dogAges.map(function (age, i) {
+    if (age <= 2) {
+      return age * 2;
+    } else {
+      return 16 + age * 4;
+    }
+  });
+  const humanAgesOver18 = humanAges.filter(age => age > 18);
+  const avgHumanAge =
+    humanAgesOver18.reduce((acc, cur) => acc + cur, 0) / humanAgesOver18.length;
+
+  return avgHumanAge;
+};
+const testData1 = [5, 2, 4, 1, 15, 8, 3];
+const testData2 = [16, 6, 10, 5, 6, 1, 4];
+console.log(calcAverageHumanAge(testData1));
+console.log(calcAverageHumanAge(testData2));
+
+/*
+// Reduce method
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// Get maximum value
+const max = movements.reduce(
+  (acc, mov) => (acc > mov ? acc : mov),
+  movements[0]
+);
+console.log(max);
+
+// Accumulator is like a snow ball
+const balance = movements.reduce((acc, cur, i) => acc + cur, 0);
+console.log(balance);
+
+/*
+// Filter
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(deposits);
+
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+/*
+// Map
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const euroToUSD = 1.1;
+
+const movementsUSD = movements.map(mov => mov * euroToUSD);
+
+console.log(movements);
+console.log(movementsUSD);
+
+const movementsUSDfor = [];
+for (const mov of movements) movementsUSDfor.push(mov * euroToUSD);
+
+console.log(movementsUSDfor);
+
+const movementsDescription = movements.map((mov, i) => {
+  return `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${
+    mov > 0 ? mov : Math.abs(mov)
+  }`;
+});
+console.log(movementsDescription);
+/*
+//Coding Challenge #1
+const checkDogs = function (dogsJulia, dogsKate) {
+  const realDogsJulia = dogsJulia.slice(1, -2);
+  const allDogs = [...realDogsJulia, ...dogsKate];
+  allDogs.forEach(function (dog, i) {
+    if (dog >= 3) {
+      console.log(`Dog ${i + 1} is an adult dog, and is ${dog} years old`);
+    } else {
+      console.log(`Dog ${i + 1} is still a puppy 🐶`);
+    }
+  });
+};
+
+checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
+/*
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
 
+/////////////////////////////////////////////////
+// forEach with Maps and Sets -------
 const currencies = new Map([
   ['USD', 'United States dollar'],
   ['EUR', 'Euro'],
   ['GBP', 'Pound sterling'],
 ]);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// Map
+currencies.forEach(function (value, key, map) {
+  console.log(`${key}: ${value}`);
+});
 
-/////////////////////////////////////////////////
+// Set
+const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
+console.log(currenciesUnique);
+currenciesUnique.forEach(function (value, key, map) {
+  // key for set is same as value
+  console.log(`${key}: ${value}`);
+});
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+/*
+// foreach -------
+for (const [i, movement] of movements.entries()) {
+  if (movement > 0) {
+    console.log(`Transaction ${i + 1}: Deposited ${movement}`);
+  } else {
+    console.log(`Transaction ${i + 1}: Withdrew ${Math.abs(movement)}`);
+  }
+}
+
+console.log(''.padStart(20, '-'));
+
+// Always needs to be current element, current index, and entire array
+movements.forEach(function (mov, i, ar) {
+  if (mov > 0) {
+    console.log(`Transaction ${i + 1}: Deposited ${mov}`);
+  } else {
+    console.log(`Transaction ${i + 1}: Withdrew ${Math.abs(mov)}`);
+  }
+});
+// forEach cannot break from for loop, will always finish entire loop
+
+/*
+// at method -------
+const arr = [23, 11, 64];
+console.log(arr[0]);
+console.log(arr.at(0));
+
+console.log(arr[arr.length - 1]);
+console.log(arr.slice(-1)[0]);
+console.log(arr.at(-1)); // Easiest way to get same outcome
+
+console.log('Austin'.at(0));
 
 /*
 let arr = ['a', 'b', 'c', 'd', 'e'];
