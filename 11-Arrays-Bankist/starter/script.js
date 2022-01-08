@@ -61,10 +61,12 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
 
-  movements.forEach(function (mov, i) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -204,6 +206,167 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 
+let sorted = false;
+
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
+/*
+// Coding challenge #4
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+const foodTooMuch = function (dog) {
+  return dog.curFood > dog.recommendedFood * 1.1;
+};
+const foodTooLittle = function (dog) {
+  return dog.curFood < dog.recommendedFood * 0.9;
+};
+
+dogs.forEach(function (dog) {
+  dog.recommendedFood = dog.weight ** 0.75 * 28;
+});
+console.log(dogs);
+
+const sarahDog = dogs.find(
+  dog => dog.owners.some(owner => owner === 'Sarah') === true
+);
+
+if (foodTooMuch(sarahDog)) {
+  console.log('Sarah feeds her dog too much');
+} else if (foodTooLittle(sarahDog)) {
+  console.log('Sarah feeds her dog too little');
+}
+
+const ownersEatTooMuch = dogs
+  .filter(dog => foodTooMuch(dog))
+  .map(dog => dog.owners)
+  .flat();
+const ownersEatTooLittle = dogs
+  .filter(dog => foodTooLittle(dog))
+  .map(dog => dog.owners)
+  .flat();
+
+console.log(
+  `${ownersEatTooMuch.slice(0, -1).join(', ')} and ${ownersEatTooMuch.slice(
+    -1
+  )} feed their dog too much`
+);
+console.log(
+  `${ownersEatTooLittle.slice(0, -1).join(', ')} and ${ownersEatTooLittle.slice(
+    -1
+  )} feed their dog too little`
+);
+
+const ownersEatPerfect = dogs
+  .filter(dog => dog.curFood === dog.recommendedFood)
+  .map(dog => dog.owners)
+  .flat();
+
+console.log(ownersEatPerfect.length >= 1);
+
+const ownersEatEnough = dogs
+  .filter(dog => !foodTooMuch(dog) && !foodTooLittle(dog))
+  .map(dog => dog.owners)
+  .flat();
+
+console.log(ownersEatEnough.length >= 1);
+
+const dogsOkay = dogs.filter(dog => !foodTooMuch(dog) && !foodTooLittle(dog));
+console.log(dogsOkay);
+
+console.log(dogs.slice().sort((a, b) => a.recommendedFood - b.recommendedFood));
+console.log(dogs);
+/*
+// Creating and filling arrays
+const x = new Array(7); // only passing in one value creates empty array with X entries
+console.log(x);
+
+x.fill(1, 3);
+console.log(x);
+x.fill(23, 2, 5);
+console.log(x);
+x.fill(7, 0, 2);
+console.log(x);
+
+// Array.from
+const y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+
+const z = Array.from({ length: 7 }, (cur, i) => i + 1);
+console.log(z);
+
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => el.textContent.replace('€', '')
+  );
+  console.log(movementsUI);
+
+  const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+  console.log(movementsUI2);
+});
+
+/*
+// Sort
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+console.log(owners);
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// console.log(movements.sort());// sorts numbers as string
+
+// Ascending
+movements.sort((a, b) => {
+  if (a > b) return 1;
+  if (b > a) return -1;
+});
+console.log(movements);
+
+// Descending
+movements.sort((a, b) => {
+  if (a > b) return -1;
+  if (b > a) return 1;
+});
+console.log(movements);
+
+// Or a quicker way
+// Ascending
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+// Descending
+movements.sort((a, b) => b - a);
+console.log(movements);
+/*
+// Flat and Flatmap
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+const arrDeep = [1, [2, [3, 4, [5]]], 6, [7, 8, [9]]];
+console.log(arrDeep.flat()); // flat method only goes one level of depth by default
+console.log(arrDeep.flat(2));
+console.log(arrDeep.flat(3));
+
+const accountMovements = accounts.map(acc => acc.movements);
+console.log(accountMovements);
+const allMovements = accountMovements.flat();
+console.log(allMovements);
+const overallBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+console.log(overallBalance);
+
+const overallBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overallBalance2);
+/*
 // Some and Every methods
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 console.log(movements.includes(-130));
