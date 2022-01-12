@@ -31,7 +31,7 @@ document.addEventListener('keydown', function (e) {
 
 ////////////////////////////////////////
 // Lecture
-
+/*
 // Selecting elements
 console.log(document.documentElement);
 console.log(document.head);
@@ -70,3 +70,92 @@ document
   .addEventListener('click', function () {
     message.remove();
   });
+
+// Styles
+message.style.backgroundColor = '#37383d';
+message.style.width = '120%';
+
+console.log(message.style.height); // Cannot access style that wasn't set in js
+console.log(message.style.backgroundColor);
+
+console.log(getComputedStyle(message).color);
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 30 + 'px';
+console.log(getComputedStyle(message).height);
+
+document.documentElement.style.setProperty('--color-primary', 'orangered');
+
+// Attributes
+const logo = document.querySelector('.nav__logo');
+console.log(logo.alt);
+console.log(logo.src);
+console.log(logo.className);
+
+// Non standard
+// logo.setAttribute('designer', 'Jonas Schmedtmann');
+console.log(logo.getAttribute('designer'));
+
+console.log(logo.src);
+console.log(logo.getAttribute('src'));
+
+const link = document.querySelector('.nav__link--btn');
+console.log(link.href);
+console.log(link.getAttribute('href'));
+
+// Data attributes
+console.log(logo.dataset.versionNumber);
+
+// Classes
+logo.classList.add('c', 'j');
+logo.classList.remove('c', 'j');
+logo.classList.toggle('c');
+logo.classList.contains('c'); // not includes
+*/
+
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+btnScrollTo.addEventListener('click', function (e) {
+  const s1coords = section1.getBoundingClientRect();
+  console.log(s1coords);
+
+  console.log(e.target.getBoundingClientRect());
+
+  console.log('Current scroll (X/Y)', window.pageXOffset, pageYOffset);
+
+  console.log(
+    'Height and width of view port',
+    document.documentElement.clientHeight,
+    document.documentElement.clientWidth
+  );
+
+  // Scrolling
+  // window.scrollTo(
+  //   s1coords.left + window.pageXOffset,
+  //   s1coords.top + window.pageYOffset
+  // );
+
+  // window.scrollTo({
+  //   left: s1coords.left + window.pageXOffset,
+  //   top: s1coords.top + window.pageYOffset,
+  //   behavior: 'smooth',
+  // });
+
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+const h1 = document.querySelector('h1');
+const alerth1 = function (e) {
+  alert('addEventListener: Great, you are reading the heading.');
+
+  h1.removeEventListener('mouseenter', alerth1); // only listens to event once
+};
+
+// Event listeners are better
+h1.addEventListener('mouseenter', alerth1);
+
+h1.onmouseenter = function (e) {
+  alert('onmouseenter: Great, you are reading the heading.');
+};
+
+setTimeout(() => h1.removeEventListener('mouseenter', alerth1), 3000);
