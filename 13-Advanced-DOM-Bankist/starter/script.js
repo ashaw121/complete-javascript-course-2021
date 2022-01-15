@@ -7,6 +7,12 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const nav = document.querySelector('.nav');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
 
 const openModal = function () {
   modal.classList.remove('hidden');
@@ -29,10 +35,78 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+btnScrollTo.addEventListener('click', function (e) {
+  const s1coords = section1.getBoundingClientRect();
+
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+/////////////////////////////////////////////////////
+// Page navigation
+
+// document.querySelectorAll('.nav__link').forEach(function (el) {
+//   el.addEventListener('click', function (e) {
+//     e.preventDefault();
+//     const id = this.getAttribute('href');
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//   });
+// });
+
+// 1. Add event listener to comment parent elements
+// 2. determine what element originated the event
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+
+  // Matching strategy
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+// Tabbed component
+
+tabsContainer.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const clickedButton = e.target.closest('.operations__tab');
+
+  if (!clickedButton) return; // Guard clause if click was not on button
+
+  // Remove active components
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
+  tabsContent.forEach(tab =>
+    tab.classList.remove('operations__content--active')
+  );
+
+  // Activate tab and content
+  clickedButton.classList.add('operations__tab--active');
+  document
+    .querySelector(`.operations__content--${clickedButton.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+
+// Menu fade animation
+const handleHover = function (e, opacity) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+};
+
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));
+////////////////////////////////////////
 ////////////////////////////////////////
 // Lecture
 /*
-// Selecting elements
+// Selecting element
 console.log(document.documentElement);
 console.log(document.head);
 console.log(document.body);
@@ -110,40 +184,8 @@ logo.classList.add('c', 'j');
 logo.classList.remove('c', 'j');
 logo.classList.toggle('c');
 logo.classList.contains('c'); // not includes
-*/
 
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
 
-btnScrollTo.addEventListener('click', function (e) {
-  const s1coords = section1.getBoundingClientRect();
-  console.log(s1coords);
-
-  console.log(e.target.getBoundingClientRect());
-
-  console.log('Current scroll (X/Y)', window.pageXOffset, pageYOffset);
-
-  console.log(
-    'Height and width of view port',
-    document.documentElement.clientHeight,
-    document.documentElement.clientWidth
-  );
-
-  // Scrolling
-  // window.scrollTo(
-  //   s1coords.left + window.pageXOffset,
-  //   s1coords.top + window.pageYOffset
-  // );
-
-  // window.scrollTo({
-  //   left: s1coords.left + window.pageXOffset,
-  //   top: s1coords.top + window.pageYOffset,
-  //   behavior: 'smooth',
-  // });
-
-  section1.scrollIntoView({ behavior: 'smooth' });
-});
-/*
 const h1 = document.querySelector('h1');
 const alerth1 = function (e) {
   alert('addEventListener: Great, you are reading the heading.');
@@ -159,7 +201,7 @@ h1.onmouseenter = function (e) {
 };
 
 setTimeout(() => h1.removeEventListener('mouseenter', alerth1), 3000);
-*/
+
 
 // rgb(255,255,255)
 const randomInt = (min, max) =>
@@ -185,3 +227,34 @@ document.querySelector('.nav').addEventListener('click', function (e) {
   this.style.backgroundColor = randomColor();
   console.log('nav', e.target, e.currentTarget);
 });
+
+
+const h1 = document.querySelector('h1');
+
+// Going downwards: child elements
+console.log(h1.querySelectorAll('.highlight'));
+console.log(h1.childNodes);
+console.log(h1.children);
+h1.firstElementChild.style.color = 'white';
+h1.lastElementChild.style.color = 'orangered';
+
+// Going upwards: parent elements
+console.log(h1.parentNode);
+console.log(h1.parentElement);
+
+// get closest parent element
+h1.closest('.header').style.background = 'var(--gradient-secondary)';
+h1.closest('h1').style.background = 'var(--gradient-primary)';
+
+// Going sideways: sibling
+console.log(h1.previousElementSibling);
+console.log(h1.nextElementSibling);
+
+console.log(h1.previousSibling);
+console.log(h1.nextSibling);
+
+console.log(h1.parentElement.children);
+[...h1.parentElement.children].forEach(function (el) {
+  if (el !== h1) el.style.transform = 'scale(0.5)';
+});
+*/
